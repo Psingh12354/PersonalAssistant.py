@@ -67,38 +67,66 @@ def sendEmail(to,content):
     server.login('pythonp558@gmail.com','python900')
     server.sendmail('pythonp558@gmail.com',to,content)
 
-wishMe()
+#wishMe()
 while True:
     query=takeCommand().lower()
     if 'wikipedia' in query:
-        speak("Searching Wikepedia...")
-        query=query.replace("wikepedia","")
-        result=wikipedia.summary(query,sentences=1) #return 2 sentence
-        speak("According to Wikipedia")
-        speak(result)
+        try:
+            speak("Searching Wikepedia...")
+            query=query.replace("wikepedia","")
+            result=wikipedia.summary(query,sentences=1) #return 2 sentence
+            speak("According to Wikipedia")
+            speak(result)
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'open youtube' in query:
-        webbrowser.open("youtube.com")
+        try:
+            webbrowser.open("youtube.com")
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'open whatsapp' in query:
-        webbrowser.open("https://web.whatsapp.com/")
+        try:
+            webbrowser.open("https://web.whatsapp.com/")
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'open google' in query:
-        webbrowser.open("google.com")
+        try:
+            webbrowser.open("google.com")
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'open stackoverflow' in query:
-        webbrowser.open("stackoverflow.com")
+        try:
+            webbrowser.open("stackoverflow.com")
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'open wiki' in query:
-        webbrowser.open("https://en.wikipedia.org/wiki/Wikipedia")
+        try:
+            webbrowser.open("https://en.wikipedia.org/wiki/Wikipedia")
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'open chandigarh university site' in query:
-        webbrowser.open("https://uims.cuchd.in/uims/")
+        try:
+            webbrowser.open("https://uims.cuchd.in/uims/")
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'play music' in query:
-        musid_dir='F:\\video songs'  #\\ to escape character
-        songs=os.listdir(musid_dir)
-        print(songs)
-        os.startfile(os.path.join(musid_dir,random.choice(songs)))
+        try:
+            musid_dir='F:\\video songs'  #\\ to escape character
+            songs=os.listdir(musid_dir)
+            print(songs)
+            os.startfile(os.path.join(musid_dir,random.choice(songs)))
+
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'the time' in query:
         strTime=datetime.datetime.now().strftime("%H:%M:%S")
         speak(f"Sir, the time is {strTime}")
     elif 'open my project folder' in query:
-        projectPath="E:\\Project2"
-        os.startfile(projectPath)
+        try:
+            projectPath="E:\\Project2"
+            os.startfile(projectPath)
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'send email' in query:
         try:
             speak("Sir whom to send!")
@@ -118,77 +146,128 @@ while True:
         speak("Your most welcome sir!")
     elif 'open notepad' in query:
         speak("Opening notepad sir!")
-        os.system("Notepad")
+        try:
+            os.system("Notepad")
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'open chrome' in query:
         speak("Opening chrome sir!")
-        os.system("chrome")
+        try:
+            os.system("chrome")
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'open vlc player' in query:
         speak("Opening vlc sir!")
-        os.system("VLC")
+        try:
+            os.system("VLC")
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'open telegram' in query:
         speak("Opening telegram sir!")
-        os.system("telegram")
+        try:
+            os.system("telegram")
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'open excel' in query:
         speak("Opening excel sir!")
-        os.system("excel")
+        try:
+            os.system("excel")
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'open word' in query:
         speak("Opening word sir!")
-        os.system("winword")
+        try:
+            os.system("winword")
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'open calc' in query:
         speak("Opening calculator sir!")
-        os.system("calc")
+        try:
+            os.system("calc")
+        except Exception as e:
+            speak("An error occured, try again")
     elif "restart" in query:
-        subprocess.call(["shutdown", "/r"])
+        try:
+            subprocess.call(["shutdown", "/r"])
+        except Exception as e:
+            speak("An error occured, try again")
 
     elif "hibernate" in query or "sleep" in query:
-        speak("Hibernating")
-        subprocess.call("shutdown / h")
+        try:
+            speak("Hibernating")
+            subprocess.call("shutdown / h")
+        except Exception as e:
+            speak("An error occured, try again")
 
     elif "log off" in query or "sign out" in query:
         speak("Make sure all the application are closed before sign-out")
-        time.sleep(5)
-        subprocess.call(["shutdown", "/l"])
+        try:
+            time.sleep(5)
+            subprocess.call(["shutdown", "/l"])
+        except Exception as e:
+            speak("An error occured, try again")
     elif "write a note" in query:
         speak("What should i write, sir")
         note = takeCommand()
-        file = open('text.txt', 'w')
-        speak("Sir, Should i include date and time")
-        snfm = takeCommand()
-        if 'yes' in snfm or 'sure' in snfm:
-            strTime=datetime.datetime.now().strftime("%H:%M:%S")
-            file.write(strTime)
-            file.write(" :- ")
-            file.write(note)
-        elif 'no' in snfm:
-            file.write(note)
+        try:
+            file = open('text.txt', 'w')
+            speak("Sir, Should i include date and time")
+            snfm = takeCommand()
+            if 'yes' in snfm or 'sure' in snfm:
+                strTime=datetime.datetime.now().strftime("%H:%M:%S")
+                file.write(strTime)
+                file.write(" :- ")
+                file.write(note)
+            elif 'no' in snfm:
+                file.write(note)
+        except Exception as e:
+            speak("An error occured, try again")
 
     elif "open note" in query:
-        speak("Showing Notes")
-        file = open("text.txt", "r")
-        print(file.read())
-        speak(file.read(6))
+        try:
+            speak("Showing Notes")
+            file = open("text.txt", "r")
+            print(file.read())
+            speak(file.read(6))
+        except Exception as e:
+            speak("An error occured, try again")
 
     elif "where is" in query:
-        query = query.replace("where is", "")
-        location = query
-        speak("User asked to Locate")
-        speak(location)
-        webbrowser.open("https://www.google.co.in/maps/dir//" + location + "")
+        try:
+            query = query.replace("where is", "")
+            location = query
+            speak("User asked to Locate")
+            speak(location)
+            webbrowser.open("https://www.google.co.in/maps/dir//" + location + "")
+        except Exception as e:
+            speak("An error occured, try again")
     elif "don't listen" in query or "stop listening" in query:
-        speak("for how much time you want to stop jarvis from listening commands")
-        a = int(takeCommand())
-        time.sleep(a)
-        print(a)
+        try:
+            speak("for how much time you want to stop jarvis from listening commands")
+            a = int(takeCommand())
+            time.sleep(a)
+            print(a)
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'lock window' in query:
-        speak("locking the device")
-        ctypes.windll.user32.LockWorkStation()
+        try:
+            speak("locking the device")
+            ctypes.windll.user32.LockWorkStation()
+        except Exception as e:
+            speak("An error occured, try again")
 
     elif 'shutdown system' in query:
-        speak("Hold On a Sec ! Your system is on its way to shut down")
-        subprocess.call('shutdown / p /f')
+        try:
+            speak("Hold On a Sec ! Your system is on its way to shut down")
+            subprocess.call('shutdown / p /f')
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'open this pc' in query:
-        speak("This pc opening")
-        os.system("")
+        try:
+            speak("This pc opening")
+            os.system("thispc")
+        except Exception as e:
+            speak("An error occured, try again")
     elif "local disk c" in query:
         try:
             speak("Local disk C opening sir!")
@@ -202,6 +281,8 @@ while True:
                 webbrowser.open("C:/"+folInC)
         except Exception as e:
             speak("An error occured, try again")
+    elif "are you listening me" in query:
+        speak("Yes sir!")
 
     elif "local disk d" in query:
         try:
@@ -229,7 +310,7 @@ while True:
                 webbrowser.open("E:/"+folInE)
         except Exception as e:
             speak("An error occured, try again")
-    elif "local disk f" in query:
+    elif "local disk f" in query or "local disc f" in query:
         try:
             speak("Local disk F opening sir!")
             os.startfile("F:")
@@ -239,7 +320,10 @@ while True:
             if "folder" in F:
                 speak("Speak folder name")
                 folInF=takeCommand()
-                webbrowser.open("F:/"+folInF)
+                name=folInF
+                file1=open(name+".txt", "r")
+                print(file1.read())
+                speak(file1.read(6))
         except Exception as e:
             speak("An error occured, try again")
 
@@ -313,28 +397,34 @@ while True:
 
 
     elif "calculate" in query:
-        speak("Enter the operation and number")
-        my_string = takeCommand()
-        def get_operator_fn(op):
-            return {
-                '+': operator.add,
-                '-': operator.sub,
-                'x': operator.mul,
-                'divided': operator.__truediv__,
-                'Mod': operator.mod,
-                'mod': operator.mod,
-                '^': operator.xor,
-            }[op]
+        try:
+            speak("Enter the operation and number")
+            my_string = takeCommand()
+            def get_operator_fn(op):
+                return {
+                    '+': operator.add,
+                    '-': operator.sub,
+                    'x': operator.mul,
+                    'divided': operator.__truediv__,
+                    'Mod': operator.mod,
+                    'mod': operator.mod,
+                    '^': operator.xor,
+                }[op]
 
 
-        def eval_binary_expr(op1, oper, op2):
-            op1, op2 = int(op1), int(op2)
-            return get_operator_fn(oper)(op1, op2)
-        print(eval_binary_expr(*(my_string.split())))
-        speak(f"Your result is {eval_binary_expr(*(my_string.split()))}")
+            def eval_binary_expr(op1, oper, op2):
+                op1, op2 = int(op1), int(op2)
+                return get_operator_fn(oper)(op1, op2)
+            print(eval_binary_expr(*(my_string.split())))
+            speak(f"Your result is {eval_binary_expr(*(my_string.split()))}")
+        except Exception as e:
+            speak("An error occured, try again")
     elif 'empty recycle bin' in query:
-        winshell.recycle_bin().empty(confirm = False, show_progress = False, sound = True)
-        speak("Recycle Bin Recycled")
+        try:
+            winshell.recycle_bin().empty(confirm = False, show_progress = False, sound = True)
+            speak("Recycle Bin Recycled")
+        except Exception as e:
+            speak("An error occured, try again")
     elif "what is" in query or "who is" in query:
         speak("Answer in process.")
         client = wolframalpha.Client("L3VYUJ-4JWGQ64HW9")
@@ -348,3 +438,47 @@ while True:
         speak("Closing sir!")
         os.system("Exiting")
         break
+    elif "whatsapp" in query:
+        try:
+            speak("Whatsapp opening!")
+            webbrowser.open("https://web.whatsapp.com/")
+        except Exception as e:
+            speak("An error occured, try again")
+    elif "change name" in query:
+        speak("What would you like to call me, Sir ")
+        assname = takeCommand()
+        speak("Thanks for naming me")
+    elif "youtube search" in query:
+        speak("What do you want to search?")
+        ytube=takeCommand()
+        speak(ytube)
+        try:
+            webbrowser.open(f'https://www.youtube.com/results?search_query='+ytube+"")
+        except Exception as e:
+            speak("An error occured, try again")
+    elif "linkedin" in query:
+        try:
+            webbrowser.open("https://in.linkedin.com/")
+        except Exception as e:
+            speak("An error occured, try again")
+    elif "black board" in query or "bb" in query:
+        try:
+            webbrowser.open("https://cuchd.blackboard.com/?new_loc=%2Fultra%2Fcourse")
+        except Exception as e:
+            speak("An error occured, try again")
+
+    elif "git" in query or "github" in query:
+        try:
+            webbrowser.open("https://github.com/")
+        except Exception as e:
+            speak("An error occured, try again")
+
+    elif "what's your name" in query or "What is your name" in query:
+        try:
+            speak("My friends call me")
+            speak(assname)
+            print("My friends call me", assname)
+        except Exception as e:
+            speak("An error occured, try again")
+    else:
+        speak("Speak again!")
