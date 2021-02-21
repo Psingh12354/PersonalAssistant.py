@@ -9,14 +9,22 @@ import winshell
 import subprocess
 import wolframalpha
 import time
+import win32com.client as wincl
 import ctypes
+from twilio.rest import Client
+from wolframalpha import Client
 import json
 from urllib.request import urlopen
 import requests
 import smtplib
 import pyjokes
 import operator
-from ecapture import ecapture as ec
+from bs4 import BeautifulSoup
+import operator
+import PyPDF2
+from tkinter.filedialog import *
+
+
 engine=pyttsx3.init("sapi5") #sapi5 microsoft speech api
 voices=engine.getProperty('voices')
 # print(voices[1].id)
@@ -52,7 +60,6 @@ def takeCommand():
         return "None"
     return query
 
-
 def sendEmail(to,content):
     server=smtplib.SMTP('smtp.gmail.com',587)
     server.ehlo()
@@ -60,7 +67,7 @@ def sendEmail(to,content):
     server.login('pythonp558@gmail.com','python900')
     server.sendmail('pythonp558@gmail.com',to,content)
 
-#wishMe()
+wishMe()
 while True:
     query=takeCommand().lower()
     if 'wikipedia' in query:
@@ -68,10 +75,11 @@ while True:
         query=query.replace("wikepedia","")
         result=wikipedia.summary(query,sentences=1) #return 2 sentence
         speak("According to Wikipedia")
-        print(result)
         speak(result)
     elif 'open youtube' in query:
         webbrowser.open("youtube.com")
+    elif 'open whatsapp' in query:
+        webbrowser.open("https://web.whatsapp.com/")
     elif 'open google' in query:
         webbrowser.open("google.com")
     elif 'open stackoverflow' in query:
@@ -105,7 +113,6 @@ while True:
             sendEmail(to,content)
             speak("Email has beed sent!")
         except Exception as e:
-            print(e)
             speak("Sorry your mail is not able to send")
     elif 'thank you' in query:
         speak("Your most welcome sir!")
@@ -130,44 +137,6 @@ while True:
     elif 'open calc' in query:
         speak("Opening calculator sir!")
         os.system("calc")
-    elif 'add number' in query:
-        speak("What's the number?")
-        speak("First number sir.")
-        num1=takeCommand()
-        speak("Second number sir.")
-        num2=takeCommand()
-        speak(sum(int(num1),int(num2)))
-    elif 'subtract number' in query:
-        speak("What's the number?")
-        speak("First number sir.")
-        num1=takeCommand()
-        speak("Second number sir.")
-        num2=takeCommand()
-        speak(int(num1)-int(num2))
-    elif 'multiply number' in query:
-        speak("What's the number?")
-        speak("First number sir.")
-        num1=takeCommand()
-        speak("Second number sir.")
-        num2=takeCommand()
-        speak(int(num1)*int(num2))
-    elif 'divide number' in query:
-        speak("What's the number?")
-        speak("First number sir.")
-        num1=takeCommand()
-        speak("Second number sir.")
-        num2=takeCommand()
-        speak(int(num1)/int(num2))
-    elif 'modulus of number' in query:
-        speak("What's the number?")
-        speak("First number sir.")
-        num1=takeCommand()
-        speak("Second number sir.")
-        num2=takeCommand()
-        speak(int(num1)%int(num2))
-    elif "camera" in query or "take a photo" in query:
-        ec.capture(0, "Jarvis Camera ", "img.jpg")
-
     elif "restart" in query:
         subprocess.call(["shutdown", "/r"])
 
@@ -186,52 +155,25 @@ while True:
         speak("Sir, Should i include date and time")
         snfm = takeCommand()
         if 'yes' in snfm or 'sure' in snfm:
-            strTime = datetime.datetime.now().strftime("% H:% M:% S")
+            strTime=datetime.datetime.now().strftime("%H:%M:%S")
             file.write(strTime)
             file.write(" :- ")
             file.write(note)
-        else:
+        elif 'no' in snfm:
             file.write(note)
 
-    elif "show note" in query:
+    elif "open note" in query:
         speak("Showing Notes")
         file = open("text.txt", "r")
         print(file.read())
         speak(file.read(6))
-    elif "weather" in query:
-
-        # Google Open weather website
-        # to get API of Open weather
-        api_key = "Api key"
-        base_url = "http://api.openweathermap.org / data / 2.5 / weather?"
-        speak(" City name ")
-        print("City name : ")
-        city_name = takeCommand()
-        complete_url = base_url + "appid =" + api_key + "&q =" + city_name
-        response = requests.get(complete_url)
-        x = response.json()
-
-        if x["cod"] != "404":
-            y = x["main"]
-            current_temperature = y["temp"]
-            current_pressure = y["pressure"]
-            current_humidiy = y["humidity"]
-            z = x["weather"]
-            weather_description = z[0]["description"]
-            print(" Temperature (in kelvin unit) = " + str(
-                current_temperature) + "\n atmospheric pressure (in hPa unit) =" + str(
-                current_pressure) + "\n humidity (in percentage) = " + str(current_humidiy) + "\n description = " + str(
-                weather_description))
-
-        else:
-            speak(" City Not Found ")
 
     elif "where is" in query:
         query = query.replace("where is", "")
         location = query
         speak("User asked to Locate")
         speak(location)
-        webbrowser.open("https://www.google.nl / maps / place/" + location + "")
+        webbrowser.open("https://www.google.co.in/maps/dir//" + location + "")
     elif "don't listen" in query or "stop listening" in query:
         speak("for how much time you want to stop jarvis from listening commands")
         a = int(takeCommand())
@@ -244,38 +186,165 @@ while True:
     elif 'shutdown system' in query:
         speak("Hold On a Sec ! Your system is on its way to shut down")
         subprocess.call('shutdown / p /f')
-    elif 'news' in query:
-
+    elif 'open this pc' in query:
+        speak("This pc opening")
+        os.system("")
+    elif "local disk c" in query:
         try:
-            jsonObj = urlopen(
-                '''https://newsapi.org / v1 / articles?source = the-times-of-india&sortBy = top&apiKey =\\times of India Api key\\''')
+            speak("Local disk C opening sir!")
+            os.startfile("C:")
+            os.scandir()
+            speak("Folder name sir.")
+            C=takeCommand()
+            if "folder" in C:
+                speak("Speak folder name")
+                folInC=takeCommand()
+                webbrowser.open("C:/"+folInC)
+        except Exception as e:
+            speak("An error occured, try again")
+
+    elif "local disk d" in query:
+        try:
+            speak("Local disk D opening sir!")
+            os.startfile("D:")
+            os.scandir()
+            speak("Folder name sir.")
+            D=takeCommand()
+            if "folder" in D:
+                speak("Speak folder name")
+                folInD=takeCommand()
+                webbrowser.open("D:/"+folInD)
+        except Exception as e:
+            speak("An error occured, try again")
+    elif "local disk e" in query:
+        try:
+            speak("Local disk E opening sir!")
+            os.startfile("E:")
+            os.scandir()
+            speak("Folder name sir.")
+            E=takeCommand()
+            if "folder" in E:
+                speak("Speak folder name")
+                folInE=takeCommand()
+                webbrowser.open("E:/"+folInE)
+        except Exception as e:
+            speak("An error occured, try again")
+    elif "local disk f" in query:
+        try:
+            speak("Local disk F opening sir!")
+            os.startfile("F:")
+            os.scandir()
+            speak("Folder name sir.")
+            F=takeCommand()
+            if "folder" in F:
+                speak("Speak folder name")
+                folInF=takeCommand()
+                webbrowser.open("F:/"+folInF)
+        except Exception as e:
+            speak("An error occured, try again")
+
+    elif "make a call" in query:
+        try:
+            speak("Calling system opening!")
+            account=os.environ["AC918bfb12ad92b2fbf42b2c8f33b60817"]
+            auth_token=os.environ["70af4bcc9734c5fa17af27f793274b1f"]
+            client=Client(account,auth_token)
+            speak("Sir whom to call!")
+            thisdict1 = {
+                "Priyanshu Singh": "+916388016659",
+                "Sagar Kumar": "+919876233807"
+            }
+            content2 = takeCommand()
+            call=client.calls.create(
+                to="+916388016659",
+                from_=thisdict1[content2],
+                url="http://demo.twilio.com/docs/voice.xml"
+            )
+            print(call.sid)
+        except Exception as e:
+            speak("An error occured, try again")
+    elif 'news' in query:
+        try:
+            jsonObj = urlopen('''http://newsapi.org/v2/everything?q=tesla&from=2021-01-21&sortBy=publishedAt&apiKey=e2c99b9641f746f98088eb727842c6cd''')
             data = json.load(jsonObj)
             i = 1
-
             speak('here are some top news from the times of india')
-            print('''=============== TIMES OF INDIA ============''' + '\n')
-
             for item in data['articles']:
                 print(str(i) + '. ' + item['title'] + '\n')
                 print(item['description'] + '\n')
                 speak(str(i) + '. ' + item['title'] + '\n')
+                if i==10:
+                    break
                 i += 1
         except Exception as e:
+            speak("Check your network connection?")
 
-            print(str(e))
+    elif 'temperature' in query:
+        try:
+            search="Delhi"
+            url=f"https://www.google.com/search?q=temperature+in+{search}"
+            r=requests.get(url)
+            data=BeautifulSoup(r.text,"html.parser")
+            temp=data.find("div",class_="BNeawe").text
+            speak(f" current temprature in {search} is {temp}")
+        except Exception as e:
+            speak("An error occured, try again")
+
+    elif 'jokes' in query:
+        try:
+            list_of_jokes = pyjokes.get_jokes(language="en", category="all")
+            for i in range(0, 4):
+                speak(list_of_jokes[i])
+        except Exception as e:
+            speak("An error occured, try again")
+    elif 'pdf reader' in query:
+        try:
+            book=askopenfilename()
+            pdfreader=PyPDF2.PdfFileReader(book)
+            pages=pdfreader.numPages
+            for num in range(0,pages):
+                page=pdfreader.getPage(num)
+                text=page.extractText()
+                player= pyttsx3.init()
+                player.say(text)
+                player.runAndWait()
+        except Exception as e:
+            speak("An error occured, try again")
+
+
+    elif "calculate" in query:
+        speak("Enter the operation and number")
+        my_string = takeCommand()
+        def get_operator_fn(op):
+            return {
+                '+': operator.add,
+                '-': operator.sub,
+                'x': operator.mul,
+                'divided': operator.__truediv__,
+                'Mod': operator.mod,
+                'mod': operator.mod,
+                '^': operator.xor,
+            }[op]
+
+
+        def eval_binary_expr(op1, oper, op2):
+            op1, op2 = int(op1), int(op2)
+            return get_operator_fn(oper)(op1, op2)
+        print(eval_binary_expr(*(my_string.split())))
+        speak(f"Your result is {eval_binary_expr(*(my_string.split()))}")
+    elif 'empty recycle bin' in query:
+        winshell.recycle_bin().empty(confirm = False, show_progress = False, sound = True)
+        speak("Recycle Bin Recycled")
     elif "what is" in query or "who is" in query:
-
-        # Use the same API key
-        # that we have generated earlier
-        client = wolframalpha.Client("API_ID")
+        speak("Answer in process.")
+        client = wolframalpha.Client("L3VYUJ-4JWGQ64HW9")
         res = client.query(query)
-
         try:
             print(next(res.results).text)
             speak(next(res.results).text)
         except StopIteration:
             print("No results")
-    elif 'quit' in query:
+    elif 'quit' in query or 'close assistant' in query:
         speak("Closing sir!")
         os.system("Exiting")
         break
