@@ -1,10 +1,33 @@
 <h1 align=center><b>PersonalAssistant.py</b></h1>
 
 ### Images
+
+### 1
 ![](https://github.com/Psingh12354/PersonalAssistant.py/blob/main/front.PNG)
+
+
+--------
+
+
+### 2
 ![](https://github.com/Psingh12354/PersonalAssistant.py/blob/main/file.PNG)
+
+
+---------
+
+
+### 3
 ![](https://github.com/Psingh12354/PersonalAssistant.py/blob/main/personal.PNG)
+
+
+-----------
+
+
+### 4
 ![](https://github.com/Psingh12354/PersonalAssistant.py/blob/main/hist.PNG)
+
+
+
 ### Code
 ```
 import argparse
