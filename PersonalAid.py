@@ -130,8 +130,8 @@ def sendEmail(to,content):
     server=smtplib.SMTP('smtp.gmail.com',587)
     server.ehlo()
     server.starttls()
-    server.login('pythonp558@gmail.com','python900')
-    server.sendmail('pythonp558@gmail.com',to,content)
+    server.login('your Email','Your email pwd')
+    server.sendmail('your Email',to,content)
 
 wishMe()
 while True:
@@ -203,9 +203,8 @@ while True:
         try:
             speak("Sir whom to send!")
             thisdict = {
-                "Priyanshu Singh": "priyanshu.7068183126@gmail.com",
-                "Sagar Kumar": "sagarkumsrdotcom3@gmail.com",
-                "Ashu": "ashugupta13090@gmail.com",
+                "Sender1 name": "Sender 1 Email",
+                "Sender2 name": "Sender 2 Email"
             }
             phrase_time_limit = 60
             content1 = takeCommand()
@@ -224,7 +223,7 @@ while True:
     elif "read email" in query or "check latest email" in query or "check my mail" in query:
         try:
             ORG_EMAIL = "@gmail.com"
-            FROM_EMAIL = "pythonp558" + ORG_EMAIL
+            FROM_EMAIL = "EmailFirst name till @" + ORG_EMAIL
             FROM_PWD = "python900"
             SMTP_SERVER = "imap.gmail.com"
             SMTP_PORT = 993
